@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "banking-system-poc",
+		"name": "Banking System POC",
+		"description": "API collection for testing the Banking System POC with various transaction scenarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "System 1 - Transaction Gateway",
+			"item": [
+				{
+					"name": "Successful Withdrawal",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000001\",\n  \"pin\": \"1234\",\n  \"amount\": 50.00,\n  \"type\": \"withdraw\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Successful Top-up",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000001\",\n  \"pin\": \"1234\",\n  \"amount\": 200.00,\n  \"type\": \"topup\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unsupported Card Range",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"5000000000000001\",\n  \"pin\": \"1111\",\n  \"amount\": 100.00,\n  \"type\": \"withdraw\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Card Number",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"9999999999999999\",\n  \"pin\": \"1234\",\n  \"amount\": 100.00,\n  \"type\": \"withdraw\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid PIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000001\",\n  \"pin\": \"9999\",\n  \"amount\": 100.00,\n  \"type\": \"withdraw\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insufficient Balance",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000003\",\n  \"pin\": \"9999\",\n  \"amount\": 1000.00,\n  \"type\": \"withdraw\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Transaction Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000001\",\n  \"pin\": \"1234\",\n  \"amount\": 100.00,\n  \"type\": \"invalid\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Missing Required Fields",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000001\",\n  \"amount\": 100.00\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Negative Amount",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000001\",\n  \"pin\": \"1234\",\n  \"amount\": -50.00,\n  \"type\": \"withdraw\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/transaction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "transaction"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "System 2 - Direct Processing",
+			"item": [
+				{
+					"name": "Direct Transaction Processing",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cardNumber\": \"4000000000000002\",\n  \"pinHash\": \"03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4\",\n  \"amount\": 75.00,\n  \"type\": \"topup\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/process",
+							"host": ["{{base_url}}"],
+							"path": ["api", "process"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Web Interface",
+			"item": [
+				{
+					"name": "Login Page",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Super Admin Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/admin/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["admin", "dashboard"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/customer/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["customer", "dashboard"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+} 

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayTabs Bank - Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #eef1ff 0%, #f3edf9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .login-container {
+            display: flex;
+            width: 100%;
+            max-width: 1000px;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .branding-panel {
+            flex: 1;
+            background: linear-gradient(145deg, #2979ff, #448aff, #82b1ff);
+            color: white;
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .branding-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-50px) translateY(-50px); }
+        }
+
+        .bank-logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .bank-tagline {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .feature-item i {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .login-form-container {
+            flex: 1;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab-button {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #90a4ae;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab-button:hover {
+            background: #f5f5f5;
+            color: #1976d2;
+        }
+
+        .tab-button.active {
+            color: #1976d2;
+            background: #f0f4f8;
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1976d2, #42a5f5);
+            border-radius: 2px;
+        }
+
+        .form-content {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .form-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 1.1rem;
+            z-index: 1;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1976d2;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #1565c0, #1976d2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(25, 118, 210, 0.4);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .signup-link a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #1565c0;
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 4px solid #e53935;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 4px solid #4caf50;
+            font-weight: 500;
+        }
+
+        .demo-section {
+            border-top: 1px solid #eee;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .demo-title {
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .demo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .demo-role {
+            font-weight: 500;
+        }
+
+        .demo-creds {
+            font-family: 'Courier New', monospace;
+            background: #f0f4f8;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 400px;
+            }
+            
+            .branding-panel {
+                padding: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-form-container {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="branding-panel">
+            <div class="bank-logo">
+                <i class="fas fa-university"></i> PayTabs Bank
+            </div>
+            <div class="bank-tagline">
+                Secure • Reliable • Innovative Banking Solutions
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Bank-grade Security</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clock"></i>
+                    <span>24/7 Access</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Mobile Banking</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Real-time Analytics</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-form-container">
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab(event, 'credentials')">
+                    <i class="fas fa-user-shield"></i> Credentials
+                </button>
+                <button class="tab-button" onclick="switchTab(event, 'card')">
+                    <i class="fas fa-credit-card"></i> Card & PIN
+                </button>
+            </div>
+
+            <!-- Credentials Login Form -->
+            <div id="credentials" class="form-content active">
+                <h2 class="form-title">Secure Login</h2>
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <i class="fas fa-user form-icon"></i>
+                        <input type="text" name="username" class="form-input" placeholder="Username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <i class="fas fa-lock form-icon"></i>
+                        <input type="password" name="password" class="form-input" placeholder="Password" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+            </div>
+
+            <!-- Card & PIN Login Form -->
+            <div id="card" class="form-content">
+                <h2 class="form-title">Card Login</h2>
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <i class="fas fa-credit-card form-icon"></i>
+                        <input type="text" name="cardNumber" class="form-input" placeholder="Card Number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <i class="fas fa-key form-icon"></i>
+                        <input type="password" name="pin" class="form-input" placeholder="PIN" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-credit-card"></i> Login with Card
+                    </button>
+                </form>
+            </div>
+
+            <!-- Error/Success Messages -->
+            <div th:if="${param.error}" class="error-message">
+                <i class="fas fa-exclamation-triangle"></i> Invalid credentials. Please try again.
+            </div>
+            
+            <div th:if="${param.logout}" class="success-message">
+                <i class="fas fa-check-circle"></i> You have been logged out successfully.
+            </div>
+
+            <div th:if="${param.signup}" class="success-message">
+                <i class="fas fa-check-circle"></i> Account created successfully! Please login.
+            </div>
+
+            <!-- Signup Link -->
+            <div class="signup-link">
+                <p>Don't have an account? <a th:href="@{/signup}">Sign up here</a></p>
+            </div>
+
+            <!-- Demo Credentials -->
+            <div class="demo-section">
+                <div class="demo-title">Demo Credentials</div>
+                <div class="demo-item">
+                    <span class="demo-role">Super Admin:</span>
+                    <span class="demo-creds">admin / admin123</span>
+                </div>
+                <div class="demo-item">
+                    <span class="demo-role">Customer 1:</span>
+                    <span class="demo-creds">john_doe / password123</span>
+                </div>
+                <div class="demo-item">
+                    <span class="demo-role">Customer 2:</span>
+                    <span class="demo-creds">jane_smith / password456</span>
+                </div>
+                <div class="demo-item">
+                    <span class="demo-role">Card/PIN:</span>
+                    <span class="demo-creds">4111111111111111 / 1234</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(evt, tabName) {
+            // Hide all form contents
+            const formContents = document.getElementsByClassName("form-content");
+            for (let i = 0; i < formContents.length; i++) {
+                formContents[i].classList.remove("active");
+            }
+
+            // Remove active class from all tab buttons
+            const tabButtons = document.getElementsByClassName("tab-button");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+
+            // Show the current tab and set button as active
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>

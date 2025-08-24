@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Dashboard - PayTabs Bank</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;6.0;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --secondary-color: #42a5f5;
+            --background-color: #f0f4f8;
+            --card-background: #ffffff;
+            --text-color: #333;
+            --muted-text-color: #757575;
+            --border-color: #e0e0e0;
+            --success-color: #4caf50;
+            --error-color: #f44336;
+            --pending-color: #ff9800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--primary-color), #1565c0);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .sidebar-logo {
+            font-size: 1.8rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background 0.3s ease;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-menu a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--card-background);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile span {
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--muted-text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            color: var(--error-color);
+        }
+
+        .content-area {
+            padding: 2rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .stat-card-icon {
+            font-size: 2.5rem;
+            padding: 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stat-card-icon.total { background-color: #e3f2fd; color: #1e88e5; }
+        .stat-card-icon.success { background-color: #e8f5e9; color: #43a047; }
+        .stat-card-icon.failed { background-color: #ffebee; color: #e53935; }
+        .stat-card-icon.volume { background-color: #fff3e0; color: #fb8c00; }
+        
+        .stat-card-info h3 {
+            font-size: 1rem;
+            color: var(--muted-text-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card-info p {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .transactions-table-container {
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .table-filters {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th, .transactions-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transactions-table th {
+            font-weight: 600;
+            color: var(--muted-text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: capitalize;
+        }
+        .status-success { background-color: #e8f5e9; color: #43a047; }
+        .status-failed { background-color: #ffebee; color: #e53935; }
+        .status-declined { background-color: #fff3e0; color: #fb8c00; }
+        
+        .amount-positive { color: var(--success-color); }
+        .amount-negative { color: var(--error-color); }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-university sidebar-logo"></i>
+            <h1 class="sidebar-title">PayTabs Bank</h1>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#"><i class="fas fa-users"></i> Customers</a>
+            <a href="#"><i class="fas fa-cogs"></i> Settings</a>
+        </nav>
+        <div class="sidebar-footer">
+            <nav class="nav-menu">
+                 <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="header">
+            <h2 class="header-title">Super Admin Dashboard</h2>
+            <div class="user-profile">
+                <span>Welcome, <strong th:text="${#authentication.name}">Admin</strong></span>
+                <a th:href="@{/logout}" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </header>
+
+        <main class="content-area">
+            <!-- Stat Cards -->
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon total"><i class="fas fa-receipt"></i></div>
+                    <div class="stat-card-info">
+                        <h3>Total Transactions</h3>
+                        <p id="total-transactions">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon success"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-card-info">
+                        <h3>Successful</h3>
+                        <p id="successful-transactions">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon failed"><i class="fas fa-times-circle"></i></div>
+                    <div class="stat-card-info">
+                        <h3>Failed/Declined</h3>
+                        <p id="failed-transactions">0</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon volume"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-card-info">
+                        <h3>Total Volume</h3>
+                        <p id="total-volume">$0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Table -->
+            <div class="transactions-table-container">
+                <div class="table-header">
+                    <h3 class="table-title">All Transactions</h3>
+                    <div class="table-filters">
+                        <input type="text" id="searchInput" class="filter-input" placeholder="Search by Card or Customer...">
+                    </div>
+                </div>
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Card Number</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-tbody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTransactions();
+            
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('keyup', fetchTransactions);
+        });
+
+        function fetchTransactions() {
+            fetch('/api/transactions/all')
+                .then(response => response.json())
+                .then(data => {
+                    populateTable(data);
+                    updateStats(data);
+                })
+                .catch(error => console.error('Error fetching transactions:', error));
+        }
+
+        function populateTable(transactions) {
+            const tbody = document.getElementById('transactions-tbody');
+            tbody.innerHTML = '';
+            
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            const filteredTransactions = transactions.filter(tx => {
+                const customerName = tx.customerName ? tx.customerName.toLowerCase() : '';
+                const cardNumber = tx.cardNumber ? tx.cardNumber.toLowerCase() : '';
+                return customerName.includes(searchTerm) || cardNumber.includes(searchTerm);
+            });
+
+            if (filteredTransactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem;">No transactions found.</td></tr>';
+                return;
+            }
+
+            filteredTransactions.forEach(tx => {
+                const row = document.createElement('tr');
+                
+                const amountClass = tx.transactionType === 'topup' ? 'amount-positive' : 'amount-negative';
+                const amountPrefix = tx.transactionType === 'topup' ? '+' : '-';
+
+                row.innerHTML = `
+                    <td>#${tx.id}</td>
+                    <td>${new Date(tx.timestamp).toLocaleString()}</td>
+                    <td>${tx.customerName || 'N/A'}</td>
+                    <td>**** **** **** ${tx.cardNumber.slice(-4)}</td>
+                    <td>${tx.transactionType}</td>
+                    <td class="${amountClass}">${amountPrefix}$${tx.amount.toFixed(2)}</td>
+                    <td><span class="status-badge status-${tx.status}">${tx.status}</span></td>
+                    <td>${tx.reason || 'N/A'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateStats(transactions) {
+            const total = transactions.length;
+            const successful = transactions.filter(t => t.status === 'success').length;
+            const failed = total - successful;
+            const totalVolume = transactions
+                .filter(t => t.status === 'success' && t.transactionType === 'topup')
+                .reduce((sum, t) => sum + t.amount, 0);
+
+            document.getElementById('total-transactions').textContent = total;
+            document.getElementById('successful-transactions').textContent = successful;
+            document.getElementById('failed-transactions').textContent = failed;
+            document.getElementById('total-volume').textContent = `$${totalVolume.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
