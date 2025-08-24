@@ -2,6 +2,14 @@
 
 This project is a Proof of Concept (POC) for a simplified banking system, developed as a task for PayTabs. It simulates core banking functionalities including transaction processing (withdrawals and top-ups), secure card validation, and role-based transaction monitoring.
 
+<img width="1470" height="797" alt="Image" src="https://github.com/user-attachments/assets/e9e0dd46-45f5-44bc-a200-b10b6aef7789" />
+
+<img width="1470" height="797" alt="Image" src="https://github.com/user-attachments/assets/705b587e-e9c8-4f5f-ae01-4b40b3caf227" />
+<img width="1470" height="798" alt="Image" src="https://github.com/user-attachments/assets/30dba96d-42af-4f3e-9ecf-cf5190182cb7" />
+<img width="1469" height="798" alt="Image" src="https://github.com/user-attachments/assets/9fad16e2-a086-4c9e-bd79-2f418a89fa7a" />
+<img width="1470" height="795" alt="Image" src="https://github.com/user-attachments/assets/723b3af9-dad6-440a-8367-9f7d33b95144" />
+<img width="1470" height="796" alt="Image" src="https://github.com/user-attachments/assets/e6e23422-edea-408c-a9a2-e584373841e3" />
+
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Features](#features)
